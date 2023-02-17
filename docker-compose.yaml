@@ -1,0 +1,27 @@
+version: "3.9"
+
+services:
+  translator:
+    image: huggingface/transformers-pytorch-gpu
+    volumes:
+      - .:/home
+    working_dir: /home
+    expose:
+      - 8000
+    command: make install && make run
+    networks:
+      - translation
+  discord:
+    build: .
+    user: node
+    restart: always
+    volumes:
+      - .:/home/node
+      - ./node_modules:/home/node/node_modules
+    networks:
+      - translation
+    depends_on:
+      - translator
+
+  networks:
+    translator:
