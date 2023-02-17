@@ -1,4 +1,4 @@
-import time
+from time import time
 from transformers import pipeline
 
 MODEL_NAME = 'papluca/xlm-roberta-base-language-detection'

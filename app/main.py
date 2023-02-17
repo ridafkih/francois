@@ -10,7 +10,7 @@ async def translate_fr_en(request: TranslationRequest):
   result = await classify(request.prospect)
 
   if not (result):
-    raise HTTPException(status_code=500, detail="Translation Failed")
+    raise HTTPException(status_code=500, detail="Classification Failed")
 
   return result
 
