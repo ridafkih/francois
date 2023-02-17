@@ -7,7 +7,7 @@ export const translate = async (text: string): Promise<string> => {
     .post(`${TRANSLATION_URL}/translate/fr/en`, {
       prospect: text,
     })
-    .catch(() => ({ data: undefined }));
+    .catch(() => ({ data: {} }));
 
   return data.translation;
 };
