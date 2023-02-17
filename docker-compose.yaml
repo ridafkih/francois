@@ -5,6 +5,7 @@ services:
     image: huggingface/transformers-pytorch-gpu
     volumes:
       - .:/home
+      - transformers:/.cache/huggingface/transformers
     working_dir: /home
     expose:
       - 8000
@@ -27,3 +28,6 @@ services:
 
 networks:
   translation:
+
+volumes:
+  transformers:
