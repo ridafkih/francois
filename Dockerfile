@@ -13,4 +13,4 @@ RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 runner
 USER runner
 
-CMD pnpm run
+CMD ["pnpm", "ts-node", "/app/src/index.ts"]
