@@ -9,5 +9,5 @@ export const translate = async (text: string): Promise<string> => {
     })
     .catch(() => ({ data: undefined }));
 
-  return data.translated_text;
+  return data.translation;
 };
