@@ -2,7 +2,7 @@ install:
 	pip3 install -r requirements.txt
 
 run:
-	export PYTORCH_ENABLE_MPS_FALLBACK=1 && cd app && python3 -m uvicorn main:app --host 0.0.0.0 --port 8000
+	cd app && python3 -m uvicorn main:app --host 0.0.0.0 --port 8000
 
 clean:
 	find . -name "*.pyc" -delete
