@@ -4,9 +4,9 @@ services:
   translator:
     image: huggingface/transformers-pytorch-gpu
     volumes:
-      - .:/home
-      - transformers:/.cache/huggingface/transformers
-    working_dir: /home
+      - .:/workspace
+      - huggingface:~/.cache/huggingface
+    working_dir: /workspace
     expose:
       - 8000
     command: make install run
@@ -30,4 +30,4 @@ networks:
   translation:
 
 volumes:
-  transformers:
+  huggingface:
