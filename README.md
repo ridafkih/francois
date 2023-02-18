@@ -3,6 +3,13 @@
   <sub>French to English in Discord</sub>
 </div>
 
+---
+<div align="center">
+  <img alt="screen recording of translation in discord" src="https://user-images.githubusercontent.com/9158485/219866528-211dd2db-1753-41df-ba3f-ea8beea39ab7.gif" width="400" />
+</div>
+
+---
+
 ## Prerequisites
 
 - Make sure you have NodeJS & NPM installed, as well as PNPM.
