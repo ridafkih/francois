@@ -5,13 +5,20 @@ services:
     image: huggingface/transformers-pytorch-gpu
     volumes:
       - .:/workspace
-      - huggingface:~/.cache/huggingface
+      - huggingface:/root/.cache/huggingface
     working_dir: /workspace
     expose:
       - 8000
     command: make install run
     networks:
       - translation
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
   discord:
     build: .
     user: node
