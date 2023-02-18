@@ -5,6 +5,10 @@ const { DISCORD_TOKEN, DISCORD_CLIENT_ID } = process.env;
 if (!DISCORD_TOKEN) throw Error("The `DISCORD_TOKEN` is unset");
 if (!DISCORD_CLIENT_ID) throw Error("The `DISCORD_CLIENT_ID` is unset");
 
+/**
+ * Registers the commands on the application-level, and starts
+ * the Discord bot service.
+ */
 export const start = () => {
   console.log("🚀 Initializing Discord Client");
 

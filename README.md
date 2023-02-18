@@ -5,9 +5,12 @@
 
 ## Prerequisites
 
-- If you plan to run the local machine-learning translation model, ensure you have Pytorch installed. If you're on Mac, make sure to install Pytorch Nightly (>2.0) as the standard version does not contain the necessary operations.
-- Make sure to have Python3 installed, you can use conda if desired.
 - Make sure you have NodeJS & NPM installed, as well as PNPM.
+
+### If Using Translation Service
+
+- Ensure you have Pytorch installed. If you're on Mac, make sure to install Pytorch Nightly (>2.0) as the standard version does not contain the necessary operations.
+- Make sure to have Python3 installed, you can use conda if desired.
 - A Docker Compose configuration exists in the root direction, you can use it to easily and quickly spin up a localized instance.
 - Make sure you have `make` installed, this will speed up installation.
 
@@ -17,6 +20,11 @@
 
 ## Setup
 
+> **Note**
+> If you plan on using DeepL to translate messages, you can skip right to setting up the Discord bot.
+
+### Setup the Translation Service
+
 First, ensure you have the repository cloned and go into the root directory of the project.
 
 These two commands will install and run the Python service, this may take a while.
@@ -24,6 +32,8 @@ These two commands will install and run the Python service, this may take a whil
 ```bash
 make install
 ```
+
+### Setup the Discord Bot
 
 Create a `.env` file and populate the following environment variables.
 
@@ -36,13 +46,22 @@ DISCORD_CLIENT_ID=
 
 # Should be the URL that points to the Python service. (eg. http://localhost:8000)
 TRANSLATION_URL=
+
+# If this is set, DeepL will be used with the API key provided for all translations,
+# if it is not set it will try to use the translation service and local model.
+DEEPL_API_KEY=
 ```
 
 ## Run
 
-These two commands will run the Python service which runs the translator, as well as the Discord bot. Once that's done, the two can talk to each other and the translation service will begin.
+If you want to run the translation service, run the following command.
 
 ```bash
 make run
+```
+
+Finally, you can run the Discord bot.
+
+```bash
 pnpm start
 ```
