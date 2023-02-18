@@ -13,7 +13,12 @@ export const translateCommand: DiscordCommand = {
       targetMessage: { cleanContent },
     } = interaction;
 
-    await interaction.deferReply({ ephemeral: true });
+    const deferred = await interaction
+      .deferReply({ ephemeral: true })
+      .catch(() => false);
+
+    if (!deferred) return;
+
     const translation = await translate(cleanContent);
 
     interaction.editReply({
