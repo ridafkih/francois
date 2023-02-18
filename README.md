@@ -59,6 +59,12 @@ TRANSLATION_URL=
 DEEPL_API_KEY=
 ```
 
+Install the dependencies with `pnpm`.
+
+```bash
+pnpm install
+```
+
 ## Run
 
 If you want to run the translation service, run the following command.
