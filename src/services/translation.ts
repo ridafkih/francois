@@ -1,5 +1,7 @@
 import axios from "axios";
 import { Translator } from "deepl-node";
+import { messageStoreHash } from "../utils/message-store";
+import type { MessageStoreController } from "../types/message-store-types";
 
 const { TRANSLATION_URL = "http://localhost:8000/", DEEPL_API_KEY } =
   process.env;

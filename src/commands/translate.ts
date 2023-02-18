@@ -1,6 +1,9 @@
 import { ApplicationCommandType, ContextMenuCommandBuilder } from "discord.js";
 import { translate } from "../services/translation";
-import type { DiscordCommand } from "../types/command";
+import { createMessageStore } from "../utils/message-store";
+import type { DiscordCommand } from "../types/command-types";
+
+const messageStore = createMessageStore();
 
 export const translateCommand: DiscordCommand = {
   builder: new ContextMenuCommandBuilder()
@@ -19,10 +22,10 @@ export const translateCommand: DiscordCommand = {
 
     if (!deferred) return;
 
-    const translation = await translate(cleanContent);
-
-    interaction.editReply({
-      content: translation ?? "Translation failed. Try again later.",
+    messageStore.get(cleanContent, (translation) => {
+      interaction.editReply({
+        content: translation ?? "Translation failed. Try again later.",
+      });
     });
   },
 };
