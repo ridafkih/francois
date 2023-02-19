@@ -22,10 +22,15 @@ export const translateCommand: DiscordCommand = {
 
     if (!deferred) return;
 
-    messageStore.get(cleanContent, (translation) => {
-      interaction.editReply({
-        content: translation ?? "Translation failed. Try again later.",
-      });
+    messageStore.get(cleanContent, {
+      onCreate() {
+        return translate(cleanContent);
+      },
+      onSet(translation) {
+        interaction.editReply({
+          content: translation ?? "Translation failed. Try again later.",
+        });
+      },
     });
   },
 };

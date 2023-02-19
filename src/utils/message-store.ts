@@ -1,22 +1,24 @@
 import { createHash } from "crypto";
-import { translate } from "../services/translation";
-import type { Message, MessageStore } from "../types/message-store-types";
-
-type OnTranslatedFunction = (translation: string) => void;
+import type {
+  MessageStore,
+  OnSetFunction,
+  SetterFunction,
+  StoreGetOptions,
+} from "../types/message-store-types";
 
 /**
  * Hashes the contents of a message or any given string.
  */
-export const messageStoreHash = (content: string) => {
+export const hashMessage = (content: string) => {
   return createHash("md5").update(content).digest("hex");
 };
 
 /**
  * Creates a message store which can be used to track messages when
- * awaiting a translation.
+ * awaiting a linkewd value.
  */
 export const createMessageStore = () => {
-  const subscribers: Record<string, OnTranslatedFunction[]> = {};
+  const subscribers: Record<string, OnSetFunction[]> = {};
   const store: MessageStore = {
     messages: new Proxy(
       {},
@@ -32,10 +34,10 @@ export const createMessageStore = () => {
     ),
   };
 
-  const subscribe = (content: string, onTranslated: OnTranslatedFunction) => {
-    const hash = messageStoreHash(content);
+  const subscribe = (content: string, onSet: OnSetFunction) => {
+    const hash = hashMessage(content);
     if (!subscribers[hash]) subscribers[hash] = [];
-    subscribers[hash].push(onTranslated);
+    subscribers[hash].push(onSet);
   };
 
   /**
@@ -43,14 +45,14 @@ export const createMessageStore = () => {
    * @param content The message content.
    */
   const add = (content: string) => {
-    const hash = messageStoreHash(content);
+    const hash = hashMessage(content);
 
     store.messages[hash] = new Proxy(
-      { originalText: content },
+      { value: content },
       {
         set(target, property, newValue, receiver) {
           if (
-            property === "translatedText" &&
+            property === "linkedValue" &&
             newValue &&
             subscribers[hash] &&
             subscribers[hash].length > 0
@@ -65,20 +67,25 @@ export const createMessageStore = () => {
     );
   };
 
-  const get = async (content: string, onTranslated: OnTranslatedFunction) => {
-    const hash = messageStoreHash(content);
+  const set = async (content: string, setter: SetterFunction) => {
+    const hash = hashMessage(await content);
+    const newValue = await setter();
+
+    store.messages[hash].linkedValue = newValue;
+  };
+
+  const get = async (content: string, { onCreate, onSet }: StoreGetOptions) => {
+    const hash = hashMessage(content);
 
     if (!store.messages[hash]) {
+      set(content, onCreate);
       add(content);
-      translate(content).then((translation) => {
-        store.messages[hash].translatedText = translation;
-      });
     }
 
     const message = store.messages[hash];
-    if (!message.translatedText) subscribe(content, onTranslated);
-    else onTranslated(message.translatedText);
+    if (!message.linkedValue) subscribe(content, onSet);
+    else onSet(message.linkedValue);
   };
 
-  return { store, get };
+  return { store, get, set };
 };
